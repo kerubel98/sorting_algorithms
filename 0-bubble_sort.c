@@ -1,37 +1,42 @@
 #include "sort.h"
-
 /**
- * bubble_sort - sorts an array of integers in ascending order using the
- * Bubble sort algorithm
+ * insertion_sort_list - sorts a doubly linked list  of integers in ascending
+ * order using the Insertion sort algorithm
  *
- * @array: Pointer to the beginning of an array
- * @size: The size of the array
+ * @list: double pointer to doubly-linked list
  *
  * Return: Nothing
  */
-
-void bubble_sort(int *array, size_t size)
+void insertion_sort_list(listint_t **list)
 {
-	int flag = 1, tmp = 0;
-	size_t i;
+	listint_t *choom = NULL;
+	listint_t *tmp = NULL;
+	listint_t *hold = NULL;
 
-	if (size < 2 || !array)
+	if (!list || !(*list) || !(*list)->next)
 		return;
 
-	while (flag == 1)
+	choom = (*list)->next;
+	while (choom)
 	{
-		flag = 0;
-
-		for (i = 0; i < size - 1; i++)
+		tmp = choom->prev;
+		hold = choom->next;
+		while (tmp && choom->n < tmp->n)
 		{
-			if (array[i] > array[i + 1])
-			{
-				tmp = array[i];
-				array[i] = array[i + 1];
-				array[i + 1] = tmp;
-				print_array(array, size);
-				flag = 1;
-			}
+			hold = choom->next;
+			if (tmp->prev != NULL)
+				tmp->prev->next = choom;
+			choom->prev = tmp->prev;
+			tmp->prev = choom;
+			choom->next = tmp;
+			tmp->next = hold;
+			if (hold)
+				hold->prev = tmp;
+			if (!choom->prev)
+				(*list) = choom;
+			print_list(*list);
+			tmp = choom->prev;
 		}
+		choom = hold;
 	}
 }
